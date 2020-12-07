@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package client;
 
 import java.io.BufferedReader;
@@ -12,8 +8,6 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.io.*;
 import java.net.*;
-
-
 
 /**
  *
@@ -26,13 +20,10 @@ public class Client {
      */
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in); //Para pedir por teclado
-                 System.out.println("Introduce user:");
+         System.out.println("Introduce user:");
         String user = scanner.nextLine();
         System.out.println("Password:");
         String password= scanner.nextLine();
-        
-        /*
-
        
         System.out.println("Gender:");
         String gender= scanner.nextLine();
@@ -47,35 +38,21 @@ public class Client {
         //OutputStream outputStream = socket.getOutputStream();
         PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+         int response;
+         
+        pw.append((char)31);
+        pw.append((char)18);
+        pw.append((char)30);
         pw.append("R");
-        //socket.getOutputStream().write('R');
         pw.append(user+"\n");
         pw.append(password+"\n");
         pw.append(gender+"\n");
         pw.append(age+"\n");
         pw.append(weight+"\n");
         pw.append(height+"\n");
+      
         pw.flush();
-        int response = br.read();
-        if(response == 65) {
-            System.out.println("OK");
-        }
-        else{
-            System.out.println("ERROR");
-        }
-        socket.close();
-
-        */
-              Socket socket = new Socket("localhost" , 9000);
-        //OutputStream outputStream = socket.getOutputStream();
-        PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        pw.append("L");
-        //socket.getOutputStream().write('R');
-        pw.append(user+"\n");
-        pw.append(password+"\n");
-        pw.flush();
-         int response = br.read();
+        response = br.read();
         if(response == 65) {
             System.out.println("OK");
         }
@@ -84,7 +61,7 @@ public class Client {
             System.exit(1);
         }
         
-         System.out.println("Bitaline (3):");
+        System.out.println("Bitaline (3):");
         String bit1 = scanner.nextLine();
         String bit2 = scanner.nextLine();
         String bit3 = scanner.nextLine();
@@ -95,7 +72,9 @@ public class Client {
         String turn_ang= scanner.nextLine();
         
         
-
+        pw.append((char)31);
+        pw.append((char)18);
+        pw.append((char)30);
         pw.append("D");
         pw.append("3\n");
         pw.append(bit1 + "\n");
@@ -112,6 +91,5 @@ public class Client {
             System.out.println("ERROR");
         }
         socket.close();
-    }
-    
+    }  
 }
