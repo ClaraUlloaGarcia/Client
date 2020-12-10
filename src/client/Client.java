@@ -46,6 +46,7 @@ public class Client {
         pw.append("R");
         pw.append(user+"\n");
         pw.append(password+"\n");
+        
         pw.append(gender+"\n");
         pw.append(age+"\n");
         pw.append(weight+"\n");
@@ -53,7 +54,7 @@ public class Client {
       
         pw.flush();
         response = br.read();
-        if(response == 65) {
+        if(response == 0) {
             System.out.println("OK");
         }
         else{
@@ -84,11 +85,29 @@ public class Client {
         pw.append(turn_ang+"\n");
         pw.flush();
         response = br.read();
-        if(response == 65) {
-            System.out.println("OK");
+        
+        if(response == 1) {
+                        System.out.println("ERROR");
+            
         }
         else{
-            System.out.println("ERROR");
+            String total = ""; //Devuelve el total de lineas que tenemos que leer
+            do {
+            total += (char)response;
+            response = br.read();
+            } while(response != '\n');
+            int totalWorkout = Integer.parseInt(total);
+            for (int i = 0; i < totalWorkout; i++){
+                String workout = br.readLine();
+                System.out.println(workout);
+            }
+            response = br.read();
+            if (response == 0){
+                System.out.println("OK");
+            }else {
+                System.out.println("Error");
+            }
+            
         }
         socket.close();
     }  
