@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -36,25 +38,9 @@ public class Client {
         
         Socket socket = new Socket("localhost" , 9000);
         //OutputStream outputStream = socket.getOutputStream();
-        PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-         int response;
+        Response response = new RegisterCommand (socket).register(user, password, gender, age, weight, height);
          
-        pw.append((char)31);
-        pw.append((char)18);
-        pw.append((char)30);
-        pw.append("R");
-        pw.append(user+"\n");
-        pw.append(password+"\n");
-        
-        pw.append(gender+"\n");
-        pw.append(age+"\n");
-        pw.append(weight+"\n");
-        pw.append(height+"\n");
-      
-        pw.flush();
-        response = br.read();
-        if(response == 0) {
+        if(response.isSuccess()) {
             System.out.println("OK");
         }
         else{
@@ -62,35 +48,35 @@ public class Client {
             System.exit(1);
         }
         
+        
+        List<Integer> bitalinoList = new ArrayList();
         System.out.println("Bitaline (3):");
         String bit1 = scanner.nextLine();
+        bitalinoList.add(Integer.parseInt(bit1));
         String bit2 = scanner.nextLine();
+        bitalinoList.add(Integer.parseInt(bit2));
         String bit3 = scanner.nextLine();
+        bitalinoList.add(Integer.parseInt(bit3));
         
         System.out.println("Introduce flexing angle:");
         String flex_ang= scanner.nextLine();
         System.out.println("Introduce turning angle:");
         String turn_ang= scanner.nextLine();
         
+        response = new VariablesCommand(socket).variableData(bitalinoList, flex_ang, turn_ang);
         
-        pw.append((char)31);
-        pw.append((char)18);
-        pw.append((char)30);
-        pw.append("D");
-        pw.append("3\n");
-        pw.append(bit1 + "\n");
-        pw.append(bit2 + "\n");
-        pw.append(bit3 + "\n");
-        pw.append(flex_ang+"\n");
-        pw.append(turn_ang+"\n");
-        pw.flush();
-        response = br.read();
-        
-        if(response == 1) {
+        if(!response.isSuccess()) {
                         System.out.println("ERROR");
             
         }
         else{
+            List<String> data = response.getData();
+            for (String line: data){
+                System.out.println(line); //Ejercicios
+            }
+            System.out.println("TODO CHACHI PIRULI");
+            
+            /*
             String total = ""; //Devuelve el total de lineas que tenemos que leer
             do {
             total += (char)response;
@@ -107,7 +93,7 @@ public class Client {
             }else {
                 System.out.println("Error");
             }
-            
+            */
         }
         socket.close();
     }  
